@@ -4,16 +4,17 @@
   top: 2em;
 }
 .lifeboat--color-selector > button {
+  filter: brightness(110%);
   width: 17px;
   border: 2px solid var(--color-text-tertiary);
   border-radius: 3px;
   background: none;
   padding: 0;
-}
-
-.lifeboat--color-selector > button img {
-  width: 100%;
-  filter: invert(34%);
+  height: 22px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/img/color_selector.svg");
 }
 
 .lifeboat--color-selector ul {
@@ -49,14 +50,14 @@
 
 .lifeboat--emphasize-button {
   left: 10px;
-  top: 4em;
+  top: 53px;
   width: 17px;
   height: 20px;
   border: 2px solid var(--color-text-tertiary);
   border-radius: 3px;
   background: none;
   padding: 0;
-  filter: invert(34%);
+  filter: brightness(110%);
   background-size: 21px;
   background-position: center;
   background-image: url("chrome-extension://__MSG_@@extension_id__/img/crown.svg");
@@ -69,7 +70,6 @@ article pre[lang="lifeboat"] {
 article {
   transition: background-color 1s;
   border-width: 0;
-  transition: border-width 0.5s;
 }
 
 article.lifeboat--emphasize,

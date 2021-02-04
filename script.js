@@ -118,15 +118,10 @@ function generateColorsEditor(container, cardElement, cardConfig) {
   const list = document.createElement("ul");
   list.onclick = list.classList.remove("open");
 
-  const icon = document.createElement("img");
-  icon.alt = "color";
-  icon.src = chrome.runtime.getURL("img/color_selector.svg");
-
   const button = document.createElement("button");
   button.onclick = (_) => list.classList.toggle("open");
 
   list.appendChild(generateColorButtons(cardElement, cardConfig));
-  button.appendChild(icon);
   editorContainer.appendChild(button);
   editorContainer.appendChild(list);
   container.appendChild(editorContainer);
