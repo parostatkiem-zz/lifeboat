@@ -47,12 +47,34 @@
   background-image: url("chrome-extension://__MSG_@@extension_id__/img/remove_color.svg");
 }
 
+.lifeboat--emphasize-button {
+  left: 10px;
+  top: 4em;
+  width: 17px;
+  height: 20px;
+  border: 2px solid var(--color-text-tertiary);
+  border-radius: 3px;
+  background: none;
+  padding: 0;
+  filter: invert(34%);
+  background-size: 21px;
+  background-position: center;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/img/crown.svg");
+}
+
 article pre[lang="lifeboat"] code {
   /* font-size: 1px; */
 }
 
 article {
   transition: background-color 1s;
+  border-width: 0;
+  transition: border-width 0.5s;
+}
+
+article.lifeboat--emphasize,
+article.lifeboat--emphasize.border {
+  border: 5px double var(--color-text-secondary) !important;
 }
 
 .hide-dialog > details {

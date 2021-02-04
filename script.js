@@ -10,7 +10,11 @@ async function init() {
 async function processCard(card) {
   const lifeboatMarkdown = card.querySelector("pre[lang='lifeboat']");
   const cardConfig = lifeboatMarkdown ? parseMarkdown(lifeboatMarkdown) : null;
+
   if (cardConfig?.color) applyColorToCard(card, cardConfig.color);
+  if (cardConfig?.emphasize) card.classList.add("lifeboat--emphasize");
+  else card.classList.remove("lifeboat--emphasize");
+
   addUItoCard(card, cardConfig);
 }
 
@@ -40,6 +44,7 @@ function watchForColumnsChange() {
 })();
 
 async function saveConfigToCard(cardElement, newConfig) {
+  document.body.classList.add("hide-dialog");
   const cardId = cardElement.getAttribute("data-card-id");
   const openDialogButton = cardElement.querySelector("details-menu button[data-dialog-id*='edit-note']");
   async function handleDetailsDialogAppeared(e) {
@@ -69,6 +74,7 @@ function applyColorToCard(cardNode, color) {
 function addUItoCard(cardNode, cardConfig) {
   const container = cardNode.querySelector(".d-flex .pl-5");
   generateColorsEditor(container, cardNode, cardConfig);
+  generateEmphasizeButton(container, cardNode, cardConfig);
 }
 
 function generateColorButtons(cardElement, cardConfig) {
@@ -95,33 +101,13 @@ function generateColorButtons(cardElement, cardConfig) {
 }
 
 function generateEmphasizeButton(container, cardElement, cardConfig) {
-  const editorContainer = document.createElement("div");
-  editorContainer.classList.add("position-absolute");
-  editorContainer.classList.add("lifeboat--color-selector");
-
-  const list = document.createElement("ul");
-  list.onclick = list.classList.remove("open");
-
-  const icon = document.createElement("img");
-  icon.alt = "color";
-  icon.src = chrome.runtime.getURL("img/color_selector.svg");
-
-  const button = document.createElement("button");
-  button.onclick = (_) => {
-    if (list.classList.contains("open")) {
-      document.body.classList.remove("hide-dialog");
-      list.classList.toggle("open");
-    } else {
-      document.body.classList.add("hide-dialog");
-      list.classList.add("open");
-    }
-  };
-
-  list.appendChild(generateColorButtons(cardElement, cardConfig));
-  button.appendChild(icon);
-  editorContainer.appendChild(button);
-  editorContainer.appendChild(list);
-  container.appendChild(editorContainer);
+  const emphasizeButton = document.createElement("button");
+  emphasizeButton.classList.add("position-absolute");
+  emphasizeButton.classList.add("lifeboat--emphasize-button");
+  emphasizeButton.title = "Toggle emphasizing of this card";
+  emphasizeButton.onclick = (_) =>
+    saveConfigToCard(cardElement, { ...cardConfig, emphasize: !cardConfig.emphasize });
+  container.appendChild(emphasizeButton);
 }
 
 function generateColorsEditor(container, cardElement, cardConfig) {
@@ -137,15 +123,7 @@ function generateColorsEditor(container, cardElement, cardConfig) {
   icon.src = chrome.runtime.getURL("img/color_selector.svg");
 
   const button = document.createElement("button");
-  button.onclick = (_) => {
-    if (list.classList.contains("open")) {
-      document.body.classList.remove("hide-dialog");
-      list.classList.toggle("open");
-    } else {
-      document.body.classList.add("hide-dialog");
-      list.classList.add("open");
-    }
-  };
+  button.onclick = (_) => list.classList.toggle("open");
 
   list.appendChild(generateColorButtons(cardElement, cardConfig));
   button.appendChild(icon);
