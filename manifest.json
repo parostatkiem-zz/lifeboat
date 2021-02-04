@@ -1,0 +1,23 @@
+{
+  "name": "Lifeboat",
+  "version": "1.0",
+  "description": "An enhancement to the Github Projects board",
+  "manifest_version": 3,
+  "icons": {
+    "64": "img/icon.png"
+  },
+  "host_permissions": ["*://github.com/*/projects*"],
+  "content_scripts": [
+    {
+      //   "run_at": "document_start",
+      "matches": ["*://github.com/*/projects*"],
+      "js": ["script.js"],
+      "css": ["style.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["img/*.*"]
+    }
+  ]
+}

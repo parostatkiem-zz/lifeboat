@@ -1,0 +1,55 @@
+.lifeboat--color-selector {
+  /* background: blue; */
+  left: 10px;
+  top: 2em;
+}
+.lifeboat--color-selector > button {
+  width: 17px;
+  border: 2px solid var(--color-text-tertiary);
+  border-radius: 3px;
+  background: none;
+  padding: 0;
+}
+
+.lifeboat--color-selector > button img {
+  width: 100%;
+  filter: invert(34%);
+}
+
+.lifeboat--color-selector ul {
+  display: none;
+  position: absolute;
+  padding: 0.5em;
+  box-shadow: 1px 1px 5px black;
+  z-index: 1;
+  grid-auto-flow: column;
+  grid-gap: 0.5em;
+  list-style: none;
+  background-color: var(--color-bg-overlay);
+  border: 1px solid var(--color-border-overlay);
+  border-radius: 6px;
+  box-shadow: var(--color-dropdown-shadow);
+}
+
+.lifeboat--color-selector ul.open {
+  display: grid;
+}
+
+.lifeboat--color-selector ul li {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  cursor: pointer;
+}
+
+article pre[lang="lifeboat"] code {
+  /* font-size: 1px; */
+}
+
+article {
+  transition: background-color 1s;
+}
+
+.hide-dialog > details {
+  visibility: hidden;
+}
