@@ -17,7 +17,9 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["img/*.*"]
+      "resources": ["img/*.*"],
+      "matches": [],
+      "extension_ids": []
     }
   ]
 }

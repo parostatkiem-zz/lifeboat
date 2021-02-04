@@ -39,6 +39,25 @@ function watchForColumnsChange() {
   setTimeout(watchForColumnsChange, 1000);
 })();
 
+async function saveConfigToCard(cardElement, newConfig) {
+  const cardId = cardElement.getAttribute("data-card-id");
+  const openDialogButton = cardElement.querySelector("details-menu button[data-dialog-id*='edit-note']");
+  async function handleDetailsDialogAppeared(e) {
+    if (e.relatedNode.tagName !== "DETAILS-DIALOG") return;
+    document.removeEventListener("DOMNodeInserted", handleDetailsDialogAppeared, false);
+
+    const editNoteForm = e.relatedNode.querySelector(`form[data-card-id='${cardId}' `);
+    if (!editNoteForm) return;
+
+    const editNoteTextbox = editNoteForm.querySelector("textarea#card_note_text");
+    editNoteTextbox.value = injectMarkdown(editNoteTextbox.value, newConfig);
+    editNoteForm.querySelector('button[type="submit"]').click();
+    setTimeout(() => document.body.classList.remove("hide-dialog"), 700); //TODO: improve
+  }
+  document.addEventListener("DOMNodeInserted", handleDetailsDialogAppeared);
+  openDialogButton.click();
+}
+
 function parseMarkdown(markdownNode) {
   return JSON.parse(markdownNode.textContent);
 }
@@ -56,29 +75,10 @@ function generateColorButtons(cardElement, cardConfig) {
   const colorButtonsCollection = document.createDocumentFragment();
 
   AVAILABLE_COLORS.forEach((color) => {
-    const thumb = document.createElement("li");
-    thumb.style.backgroundColor = color;
-    thumb.onclick = (_) => {
-      const cardId = cardElement.getAttribute("data-card-id");
-
-      const a = cardElement.querySelector("details-menu button[data-dialog-id*='edit-note']");
-      async function listenForChanges(e) {
-        if (e.relatedNode.tagName === "DETAILS-DIALOG") {
-          document.removeEventListener("DOMNodeInserted", listenForChanges, false);
-
-          const editNoteForm = e.relatedNode.querySelector(`form[data-card-id='${cardId}' `);
-          if (!editNoteForm) return;
-
-          const editNoteTextbox = editNoteForm.querySelector("textarea#card_note_text");
-          editNoteTextbox.value = injectMarkdown(editNoteTextbox.value, { ...cardConfig, color });
-          editNoteForm.querySelector('button[type="submit"]').click();
-          setTimeout(() => document.body.classList.remove("hide-dialog"), 700); //TODO: improve
-        }
-      }
-      document.addEventListener("DOMNodeInserted", listenForChanges);
-      a.click();
-    };
-    colorButtonsCollection.appendChild(thumb);
+    const colorButton = document.createElement("li");
+    colorButton.style.backgroundColor = color;
+    colorButton.onclick = (_) => saveConfigToCard(cardElement, { ...cardConfig, color });
+    colorButtonsCollection.appendChild(colorButton);
   });
 
   return colorButtonsCollection;
