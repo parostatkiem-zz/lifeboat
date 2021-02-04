@@ -1,5 +1,5 @@
 console.log("Lifeboat extension loaded");
-const AVAILABLE_COLORS = ["#ffed66", "#e07a5f", "#8d80ad", "#81b29a", "#f2cc8f"];
+const AVAILABLE_COLORS = ["#ffadad", "#ffd6a5", "#fdffb6", "#ddffd6", "#C2E8FF", "#ffebff"];
 
 async function init() {
   const cards = document.querySelectorAll("article");

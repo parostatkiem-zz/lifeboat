@@ -62,8 +62,8 @@
   background-image: url("chrome-extension://__MSG_@@extension_id__/img/crown.svg");
 }
 
-article pre[lang="lifeboat"] code {
-  /* font-size: 1px; */
+article pre[lang="lifeboat"] {
+  display: none;
 }
 
 article {
