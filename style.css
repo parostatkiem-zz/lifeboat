@@ -42,6 +42,11 @@
   cursor: pointer;
 }
 
+.lifeboat--color-selector ul li.no-color {
+  background-size: contain;
+  background-image: url("chrome-extension://__MSG_@@extension_id__/img/remove_color.svg");
+}
+
 article pre[lang="lifeboat"] code {
   /* font-size: 1px; */
 }

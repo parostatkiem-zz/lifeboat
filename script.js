@@ -74,6 +74,16 @@ function addUItoCard(cardNode, cardConfig) {
 function generateColorButtons(cardElement, cardConfig) {
   const colorButtonsCollection = document.createDocumentFragment();
 
+  const noColorButton = document.createElement("li", { className: "no-color" });
+  noColorButton.classList.add("no-color");
+  noColorButton.title = "Remove color";
+  noColorButton.onclick = (_) => {
+    const newConfig = { ...cardConfig };
+    delete newConfig.color;
+    saveConfigToCard(cardElement, newConfig);
+  };
+  colorButtonsCollection.appendChild(noColorButton);
+
   AVAILABLE_COLORS.forEach((color) => {
     const colorButton = document.createElement("li");
     colorButton.style.backgroundColor = color;
@@ -82,6 +92,36 @@ function generateColorButtons(cardElement, cardConfig) {
   });
 
   return colorButtonsCollection;
+}
+
+function generateEmphasizeButton(container, cardElement, cardConfig) {
+  const editorContainer = document.createElement("div");
+  editorContainer.classList.add("position-absolute");
+  editorContainer.classList.add("lifeboat--color-selector");
+
+  const list = document.createElement("ul");
+  list.onclick = list.classList.remove("open");
+
+  const icon = document.createElement("img");
+  icon.alt = "color";
+  icon.src = chrome.runtime.getURL("img/color_selector.svg");
+
+  const button = document.createElement("button");
+  button.onclick = (_) => {
+    if (list.classList.contains("open")) {
+      document.body.classList.remove("hide-dialog");
+      list.classList.toggle("open");
+    } else {
+      document.body.classList.add("hide-dialog");
+      list.classList.add("open");
+    }
+  };
+
+  list.appendChild(generateColorButtons(cardElement, cardConfig));
+  button.appendChild(icon);
+  editorContainer.appendChild(button);
+  editorContainer.appendChild(list);
+  container.appendChild(editorContainer);
 }
 
 function generateColorsEditor(container, cardElement, cardConfig) {
