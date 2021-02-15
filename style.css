@@ -32,7 +32,7 @@
   box-shadow: var(--color-dropdown-shadow);
 }
 
-.lifeboat--color-selector ul.open {
+.lifeboat--color-selector[aria-expanded="true"] ul {
   display: grid;
 }
 

@@ -9,7 +9,6 @@
   "host_permissions": ["*://github.com/*/projects*"],
   "content_scripts": [
     {
-      //   "run_at": "document_start",
       "matches": ["*://github.com/*/projects*"],
       "js": ["script.js"],
       "css": ["style.css"]

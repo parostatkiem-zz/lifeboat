@@ -1,10 +1,50 @@
 console.log("Lifeboat extension loaded");
-const AVAILABLE_COLORS = ["#ffadad", "#ffd6a5", "#fdffb6", "#ddffd6", "#C2E8FF", "#ffebff"];
+const AVAILABLE_COLORS = [
+  {
+    name: "Light Pink",
+    hex: "ffadad",
+    rgb: [255, 173, 173],
+  },
+  {
+    name: "Deep Champagne",
+    hex: "ffd6a5",
+    rgb: [255, 214, 165],
+  },
+  {
+    name: "Lemon Yellow Crayola",
+    hex: "fdffb6",
+    rgb: [253, 255, 182],
+  },
+  {
+    name: "Nyanza",
+    hex: "ddffd6",
+    rgb: [221, 255, 214],
+  },
+  {
+    name: "Uranian Blue",
+    hex: "c2e8ff",
+    rgb: [194, 232, 255],
+  },
+  {
+    name: "Pale Purple Pantone",
+    hex: "ffebff",
+    rgb: [255, 235, 255],
+  },
+];
+
+function rgbArrayToString(rgbArr) {
+  return `rgb(${rgbArr.join(",")})`;
+}
 
 async function init() {
   const cards = document.querySelectorAll("article");
   console.log("Cards found initially:", cards.length);
   cards.forEach(processCard);
+  document.addEventListener("click", (_) => {
+    document
+      .querySelectorAll('.lifeboat--color-selector[aria-expanded="true"]')
+      .forEach((selector) => selector.setAttribute("aria-expanded", false));
+  });
 }
 
 async function processCard(card) {
@@ -25,7 +65,6 @@ function watchForColumnsChange() {
       if (mutation.addedNodes?.length) {
         let addedCards = [];
         mutation.addedNodes.forEach((n) => n.tagName === "ARTICLE" && addedCards.push(n)); // there's no Array.filter
-
         if (addedCards.length) {
           console.log("Card changes detected");
           addedCards.forEach(processCard);
@@ -68,7 +107,7 @@ function parseMarkdown(markdownNode) {
 }
 
 function applyColorToCard(cardNode, color) {
-  cardNode.style.backgroundColor = color;
+  if (cardNode.style.backgroundColor !== color) cardNode.style.backgroundColor = color;
 }
 
 function addUItoCard(cardNode, cardConfig) {
@@ -92,8 +131,10 @@ function generateColorButtons(cardElement, cardConfig) {
 
   AVAILABLE_COLORS.forEach((color) => {
     const colorButton = document.createElement("li");
-    colorButton.style.backgroundColor = color;
-    colorButton.onclick = (_) => saveConfigToCard(cardElement, { ...cardConfig, color });
+    colorButton.title = color.name;
+    colorButton.style.backgroundColor = rgbArrayToString(color.rgb);
+    colorButton.onclick = (_) =>
+      saveConfigToCard(cardElement, { ...cardConfig, color: rgbArrayToString(color.rgb) });
     colorButtonsCollection.appendChild(colorButton);
   });
 
@@ -116,10 +157,12 @@ function generateColorsEditor(container, cardElement, cardConfig) {
   editorContainer.classList.add("lifeboat--color-selector");
 
   const list = document.createElement("ul");
-  list.onclick = list.classList.remove("open");
 
   const button = document.createElement("button");
-  button.onclick = (_) => list.classList.toggle("open");
+  button.onclick = (e) => {
+    editorContainer.setAttribute("aria-expanded", true);
+    e.stopPropagation();
+  };
 
   list.appendChild(generateColorButtons(cardElement, cardConfig));
   editorContainer.appendChild(button);
